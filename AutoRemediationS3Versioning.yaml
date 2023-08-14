@@ -1,0 +1,18 @@
+description: Auto-Remediation to fix S3 Bucket Versioning
+schemaVersion: '0.3'
+assumeRole: '{{ AutomationAssumeRole }}'
+parameters:
+  BucketName:
+    type: String
+    description: (Required) The name of the Amazon S3 bucket.
+  AutomationAssumeRole:
+    type: String
+    description: The ARN of the role that allows Automation to perform the actions on your behalf.
+    default: ''
+mainSteps:
+  - name: AutoRemediationS3Versioning
+    action: 'aws:invokeLambdaFunction'
+    inputs:
+      InvocationType: RequestResponse
+      FunctionName: s3-versioning-remediation
+      Payload: "{\"BucketName\": \"{{BucketName}}\"}"
